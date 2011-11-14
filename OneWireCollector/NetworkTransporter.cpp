@@ -1,29 +1,25 @@
 #include "WProgram.h"
 #include <SPI.h>
-// #include "/Applications/Arduino.app/Contents/Resources/Java/libraries/Ethernet/Ethernet.h"
 #include <Ethernet.h>
 #include "NetworkTransporter.h"
+
+#define DEBUG
 
 extern int nr_sensors;
 extern char* names[];
 extern int temperatures[];
 
+extern Client socket;
 
-// Shield's MAC Address
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };  
-// Shield's IP Address
-byte ip[] = { 192, 168, 2, 177 };
-// The server to connect to
-byte server[] = { 192, 168, 2, 217 };
-// our socket
-Client socket(server, 80);
 
 NetworkTransporter::NetworkTransporter(unsigned long pause): TimedState(pause) {
-    Ethernet.begin(mac, ip);
-    sensor = 0;
 }
 
 void NetworkTransporter::action(void) {
+    #ifdef DEBUG
+    Serial.println("NetworkTransporter: action");
+    #endif
+    
     switch (state) {
         case NET_STATE_SEND:    send(); break;
         case NET_STATE_RECEIVE: receive(); break;
@@ -50,24 +46,43 @@ int _append( char c, char *string, int pos ) {
     string[pos] = '\0';
     return pos;
 }
+
+int _append( char *c, char *string, int pos ) {
+    while (*c) {
+        string[pos++] = *c++;
+    }
+    string[pos] = '\0';
+    return pos;
+}
  
 void NetworkTransporter::send(void) {
+    #ifdef DEBUG
+    Serial.println("NetworkTransporter: send");
+    #endif
+    
     if (socket.connect()) {
-        char buffer[100];
+        char buffer[200];
         int pos = 0;
         int i;
         
         buffer[0] = '\0';
         for (i = 0; i < nr_sensors; i++) {
             if (i > 0) pos = _append('&', buffer, pos);
-            pos = _append(i, buffer, pos);
+            // pos = _append(i, buffer, pos);
+            pos = _append(names[i], buffer, pos);
             pos = _append('=', buffer, pos);
             pos = _append(temperatures[i], buffer, pos);
         }
         
-        socket.println("POST /save_measure HTTP/1.0");
+        #ifdef DEBUG
+        Serial.print("NetworkTransporter: ");
+        Serial.println(buffer);
+        #endif
         
-        socket.println("Host: www.xxx.de");
+        
+        socket.println("POST /save_measures HTTP/1.0");
+        
+        // socket.println("Host: www.xxx.de");
         socket.println("Content-Type: application/x-www-form-urlencoded");
         socket.print("Content-Length: "); socket.println(pos, DEC);
         socket.println();
@@ -79,6 +94,9 @@ void NetworkTransporter::send(void) {
 }
 
 void NetworkTransporter::receive(void) {
+    #ifdef DEBUG
+    Serial.println("NetworkTransporter: receive");
+    #endif
     if (socket.connected()) {
         while (socket.available()) {
             char c = socket.read();

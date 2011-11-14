@@ -15,17 +15,37 @@ wenn DEBUG macro gesetzt --> Diagnose Ausgaben am seriellen Port
 #include "DisplaySwitcher.h"
 #include "NetworkTransporter.h"
 
-#define DEBUG
+#define noDEBUG
 
 int nr_sensors     = 5;
 int lines[]        = { 40, 41, 42, 43, 44 };
 char* names[]      = { "Buero", "Heizung", "Waschkueche", "Fremdenzimmer", "Aussen" };
 int temperatures[] = { -99, -99, -99, -99, -99 };
 
+// Shield's MAC Address
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };  
+
+// Shield's IP Address
+byte ip[] = { 192,168,2,177 };
+
+// Router
+byte gateway[] = { 192,168,2,1 };
+
+// Network mask
+byte subnet[] = { 255,255,255,0 };
+// The server to connect to
+
+byte server[] = { 93,186,200,140 };
+
+// our socket
+Client socket(server, 81);
+
 
 SensorReader sensor_reader(READ_WAIT_TIME);
 DisplaySwitcher display_switcher(DISPLAY_WAIT_TIME);
-//NetworkTransporter network_transporter(NET_WAIT_TIME);
+NetworkTransporter network_transporter(NET_WAIT_TIME);
+
+
 
 void setup() {
     Serial.begin(9600);  // DEBUG output
@@ -34,13 +54,16 @@ void setup() {
     Serial.println("main - setup");
     #endif
 
+    Ethernet.begin(mac, ip, gateway, subnet);
+
+
     Display.clear();
 }
 
 void loop() {
     sensor_reader.tick();
     display_switcher.tick();
-    // network_transporter.tick();
+    network_transporter.tick();
 }
 
 

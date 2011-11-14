@@ -33,15 +33,15 @@ void TimedState::tick(void) {
 }
 
 void TimedState::action(void) {
-	// typically overloaded
+    // typically overloaded
 }
 
 int TimedState::pause_is_over(void) {
-	unsigned long m = millis();
-	boolean is_over = false;
-	
-	unsigned long next_activation_at = last_activated + pause;
-	
+    unsigned long m = millis();
+    boolean is_over = false;
+    
+    unsigned long next_activation_at = last_activated + pause;
+    
         #ifdef DEBUG
         Serial.print(millis());
         Serial.print("TimedState - pause_is_over?, last_activated: ");
@@ -52,47 +52,47 @@ int TimedState::pause_is_over(void) {
         Serial.print(next_activation_at, DEC);
         #endif
         
-	if (last_tested <= m) {
-		// timer did not overrun
-		if (next_activation_at >= last_activated) {
-			// calculated time did not overrun
-			is_over = (m >= next_activation_at);
+    if (last_tested <= m) {
+        // timer did not overrun
+        if (next_activation_at >= last_activated) {
+            // calculated time did not overrun
+            is_over = (m >= next_activation_at);
 
                         #ifdef DEBUG
                         Serial.print(" - CASE A");
                         #endif
-		} else {
-			// calculated time did overrun
-			is_over = false;
+        } else {
+            // calculated time did overrun
+            is_over = false;
 
                         #ifdef DEBUG
                         Serial.print(" - CASE B");
                         #endif
-		}
-	} else {
-		// timer did overrun
-		if (next_activation_at > last_activated) {
-			// calculated time did not overrun
-			is_over = true;
+        }
+    } else {
+        // timer did overrun
+        if (next_activation_at > last_activated) {
+            // calculated time did not overrun
+            is_over = true;
                         #ifdef DEBUG
                         Serial.print(" - CASE C");
                         #endif
-		} else {
-			// calculated time did overrun
-			is_over = (m >= next_activation_at);
+        } else {
+            // calculated time did overrun
+            is_over = (m >= next_activation_at);
                         #ifdef DEBUG
                         Serial.print(" - CASE D");
                         #endif
-		}
-	}
-	
-	last_tested = m;
+        }
+    }
+    
+    last_tested = m;
 
         #ifdef DEBUG
         Serial.print(" , is_over: ");
         Serial.println(is_over, DEC);
         #endif
-	
+    
         return is_over;
 }
 
