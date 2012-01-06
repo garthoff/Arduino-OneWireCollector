@@ -1,0 +1,16 @@
+Changes made to OneWireColector
+
+2012-01-06: bugfixing
+
+  [BUG FIXES]
+    - logic error: the overrunning millis() timer situation was considered
+      but handled wrong. The whole system halted instead of continuing.
+    - removed a not-more neccesary variable
+
+2011-11-14: basically usable
+
+  [FEATURES]
+    - network layer: transport measures to server every 15 minutes
+    - display every other sensor with a 2 second delay
+    - measure sensures in a round robin fashion
+

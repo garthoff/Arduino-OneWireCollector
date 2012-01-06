@@ -4,7 +4,7 @@
 class TimedState {
 private:
     unsigned long last_activated;
-    unsigned long last_tested;
+    // not needed any more: unsigned long last_tested;
     unsigned long pause;
 
 protected:

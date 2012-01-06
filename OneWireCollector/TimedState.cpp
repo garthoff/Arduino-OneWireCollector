@@ -5,6 +5,7 @@
 
 TimedState::TimedState(unsigned long p) {
     state = 0;
+    last_activated = 0;
     set_pause(p);
 }
 
@@ -25,9 +26,9 @@ void TimedState::tick(void) {
         Serial.print(", pause: ");
         Serial.println(pause, DEC);
         #endif
-        
+
         last_activated = millis();
-        
+
         action();
     }
 }
@@ -39,9 +40,9 @@ void TimedState::action(void) {
 int TimedState::pause_is_over(void) {
     unsigned long m = millis();
     boolean is_over = false;
-    
+
     unsigned long next_activation_at = last_activated + pause;
-    
+
         #ifdef DEBUG
         Serial.print(millis());
         Serial.print("TimedState - pause_is_over?, last_activated: ");
@@ -51,8 +52,8 @@ int TimedState::pause_is_over(void) {
         Serial.print(", next: ");
         Serial.print(next_activation_at, DEC);
         #endif
-        
-    if (last_tested <= m) {
+
+    if (last_activated <= m) {
         // timer did not overrun
         if (next_activation_at >= last_activated) {
             // calculated time did not overrun
@@ -85,21 +86,21 @@ int TimedState::pause_is_over(void) {
                         #endif
         }
     }
-    
-    last_tested = m;
+
+    // last_tested = m;
 
         #ifdef DEBUG
         Serial.print(" , is_over: ");
         Serial.println(is_over, DEC);
         #endif
-    
+
         return is_over;
 }
 
 void TimedState::set_pause(unsigned long p) {
     pause = p;
     last_activated = millis();
-    last_tested = last_activated;
+    // last_tested = last_activated;
 }
 
 int TimedState::get_state(void) {
