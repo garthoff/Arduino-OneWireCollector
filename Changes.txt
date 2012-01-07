@@ -1,5 +1,13 @@
 Changes made to OneWireColector
 
+2012-01-07: diagnostic
+
+  [FEATURES]
+    - TimedState records nr of activations
+    - DiagnosticOutput: collects nr activations of other states ans prints
+      this info plus a timestamp and nr of overruns to serial port.
+      Gives a feeling of activities on the arduino board.
+
 2012-01-06: bugfixing
 
   [BUG FIXES]

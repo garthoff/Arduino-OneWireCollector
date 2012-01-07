@@ -6,6 +6,7 @@
 TimedState::TimedState(unsigned long p) {
     state = 0;
     last_activated = 0;
+    nr_activations = 0;
     set_pause(p);
 }
 
@@ -27,9 +28,10 @@ void TimedState::tick(void) {
         Serial.println(pause, DEC);
         #endif
 
-        last_activated = millis();
-
         action();
+
+        nr_activations++;
+        last_activated = millis();
     }
 }
 
@@ -112,3 +114,10 @@ void TimedState::set_state(int s, unsigned long p) {
     set_pause(p);
 }
 
+unsigned long TimedState::get_last_activated(void) {
+    return last_activated;
+}
+
+unsigned int TimedState::get_nr_activations(void) {
+    return nr_activations;
+}

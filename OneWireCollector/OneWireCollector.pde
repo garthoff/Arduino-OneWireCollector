@@ -11,6 +11,7 @@ wenn DEBUG macro gesetzt --> Diagnose Ausgaben am seriellen Port
 
 #include "Display.h"
 
+#include "DiagnosticOutput.h"
 #include "SensorReader.h"
 #include "DisplaySwitcher.h"
 #include "NetworkTransporter.h"
@@ -40,12 +41,10 @@ byte server[] = { 93,186,200,140 };
 // our socket
 Client socket(server, 81);
 
-
+DiagnosticOutput diagnostic_output(IDLE_WAIT_TIME);
 SensorReader sensor_reader(READ_WAIT_TIME);
 DisplaySwitcher display_switcher(DISPLAY_WAIT_TIME);
 NetworkTransporter network_transporter(NET_WAIT_TIME);
-
-
 
 void setup() {
     Serial.begin(9600);  // DEBUG output
@@ -56,14 +55,12 @@ void setup() {
 
     Ethernet.begin(mac, ip, gateway, subnet);
 
-
     Display.clear();
 }
 
 void loop() {
+    diagnostic_output.tick();
     sensor_reader.tick();
     display_switcher.tick();
     network_transporter.tick();
 }
-
-
