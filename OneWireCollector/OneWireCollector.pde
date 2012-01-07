@@ -39,7 +39,7 @@ byte subnet[] = { 255,255,255,0 };
 byte server[] = { 93,186,200,140 };
 
 // our socket
-Client socket(server, 81);
+// EthernetClient socket(server, 81);
 
 DiagnosticOutput diagnostic_output(IDLE_WAIT_TIME);
 SensorReader sensor_reader(READ_WAIT_TIME);

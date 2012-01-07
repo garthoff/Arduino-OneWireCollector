@@ -1,7 +1,11 @@
 #ifndef DISPLAY_H
 #define DISPLAY_h
 
+#if defined(ARDUINO) && ARDUINO >= 100
+#include "Arduino.h"
+#else
 #include "WProgram.h"
+#endif
 
 class DisplayClass {
 public:
