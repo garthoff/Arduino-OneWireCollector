@@ -1,8 +1,4 @@
-#if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
 #include "SensorReader.h"
 
 #define noDEBUG
@@ -15,7 +11,6 @@ OneWire wire(42);
 
 SensorReader::SensorReader(unsigned long pause) :TimedState(pause) {
     sensor = 0;
-    //wire = ds;
 }
 
 void SensorReader::action(void) {

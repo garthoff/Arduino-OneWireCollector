@@ -1,8 +1,5 @@
 /*
-Messung und Anzeige der Temperatur eines Sensors an *einem* Draht (Parasite-Modus)
-
-wenn DEBUG macro gesetzt --> Diagnose Ausgaben am seriellen Port
-
+Measure and display of values using OneWire sensors
 */
 
 #include <OneWire.h>   // needed to avoid linker messages
@@ -38,7 +35,7 @@ byte subnet[] = { 255,255,255,0 };
 
 byte server[] = { 93,186,200,140 };
 
-// our socket
+// our socket --> defined in NetworkTransporter.cpp
 // EthernetClient socket(server, 81);
 
 DiagnosticOutput diagnostic_output(IDLE_WAIT_TIME);

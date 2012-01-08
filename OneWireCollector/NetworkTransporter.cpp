@@ -1,8 +1,4 @@
-#if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
 #include <SPI.h>
 #include <Ethernet.h>
 #include "NetworkTransporter.h"
@@ -13,7 +9,7 @@ extern int nr_sensors;
 extern char* names[];
 extern int temperatures[];
 
-extern EthernetClient socket;
+EthernetClient socket;
 extern byte server[];
 
 NetworkTransporter::NetworkTransporter(unsigned long pause): TimedState(pause) {
@@ -72,7 +68,6 @@ void NetworkTransporter::send(void) {
         buffer[0] = '\0';
         for (i = 0; i < nr_sensors; i++) {
             if (i > 0) pos = _append('&', buffer, pos);
-            // pos = _append(i, buffer, pos);
             pos = _append(names[i], buffer, pos);
             pos = _append('=', buffer, pos);
             pos = _append(temperatures[i], buffer, pos);

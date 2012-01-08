@@ -1,5 +1,14 @@
 Changes made to OneWireColector
 
+2012-01-08: version 1.0
+
+  [FEATURES]
+    - changed code to run with version 1.0
+    - as Ethernet code differs, only Arduino version 1.0 is possible
+    
+  [PROBLEMS]
+    - Ethernet layer does not send data -- still to debug.
+
 2012-01-07: diagnostic
 
   [FEATURES]

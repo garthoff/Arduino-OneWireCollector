@@ -4,7 +4,6 @@
 class TimedState {
 private:
     unsigned long last_activated;
-    // not needed any more: unsigned long last_tested;
     unsigned long pause;
     unsigned int nr_activations;
 

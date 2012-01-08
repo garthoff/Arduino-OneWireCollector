@@ -1,8 +1,4 @@
-#if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
 #include "Display.h"
 
 #define display Serial1
@@ -25,13 +21,8 @@ void DisplayClass::set_cursor_position(byte pos) {
 }
 
 void DisplayClass::control_sequence(byte b) {
-#if defined(ARDUINO) && ARDUINO >= 100
     display.write(0xfe);
     display.write(b);
-#else
-    display.print( 0xfe, BYTE );
-    display.print( b, BYTE );
-#endif
 }
 
 void DisplayClass::print(char x)          { display.print(x); }

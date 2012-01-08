@@ -1,11 +1,7 @@
 #ifndef DIANOSTIC_OUTPUT_H
 #define DIANOSTIC_OUTPUT_H
 
-#if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
 #include "TimedState.h"
 
 #define IDLE_WAIT_TIME 10000

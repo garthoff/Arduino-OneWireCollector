@@ -1,8 +1,4 @@
-#if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
 #include "Display.h"
 #include "DisplaySwitcher.h"
 
@@ -24,8 +20,6 @@ void DisplaySwitcher::action(void) {
 
     display_name_and_temperature(names[sensor], temperatures[sensor]);
     sensor = (sensor + 1) % nr_sensors;
-    
-    // set_pause(DISPLAY_WAIT_TIME);
 }
 
 void DisplaySwitcher::display_name_and_temperature(char *name, int temperature) {
