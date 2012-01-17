@@ -15,13 +15,40 @@ Measure and display of values using OneWire sensors
 
 #define noDEBUG
 
+// Location: one of these must be set
+#define TRM
+#define noER
+
+#ifdef TRM
+int nr_sensors     = 5;
+int lines[]        = { 40, 41, 42, 43, 44 };
+char* names[]      = { "Heizraum", "Heizung", "Hobbyraum", "Flur", "Aussen" };
+int temperatures[] = { -99, -99, -99, -99, -99 };
+
+// Shield's MAC Address
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEC };
+
+// Shield's IP Address
+byte ip[] = { 192,168,2,178 };
+
+// Router
+byte gateway[] = { 192,168,2,1 };
+
+// Network mask
+byte subnet[] = { 255,255,255,0 };
+// The server to connect to
+
+byte server[] = { 93,186,200,140 };
+#endif
+
+#ifdef ER
 int nr_sensors     = 5;
 int lines[]        = { 40, 41, 42, 43, 44 };
 char* names[]      = { "Buero", "Heizung", "Waschkueche", "Fremdenzimmer", "Aussen" };
 int temperatures[] = { -99, -99, -99, -99, -99 };
 
 // Shield's MAC Address
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };  
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
 // Shield's IP Address
 byte ip[] = { 192,168,2,177 };
@@ -34,6 +61,7 @@ byte subnet[] = { 255,255,255,0 };
 // The server to connect to
 
 byte server[] = { 93,186,200,140 };
+#endif
 
 // our socket --> defined in NetworkTransporter.cpp
 // EthernetClient socket(server, 81);
@@ -45,7 +73,7 @@ NetworkTransporter network_transporter(NET_WAIT_TIME);
 
 void setup() {
     Serial.begin(9600);  // DEBUG output
-    
+
     #ifdef DEBUG
     Serial.println("main - setup");
     #endif
