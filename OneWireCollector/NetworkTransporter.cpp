@@ -9,8 +9,9 @@ extern int nr_sensors;
 extern char* names[];
 extern int temperatures[];
 
-EthernetClient socket;
-extern byte server[];
+EthernetClient client;
+extern IPAddress server;
+extern byte port;
 
 NetworkTransporter::NetworkTransporter(unsigned long pause): TimedState(pause) {
 }
@@ -60,7 +61,7 @@ void NetworkTransporter::send(void) {
     Serial.println("NetworkTransporter: send");
     #endif
     
-    if (socket.connect(server,81)) {
+    if (client.connect(server,port) > 0) {
         char buffer[200];
         int pos = 0;
         int i;
@@ -79,16 +80,27 @@ void NetworkTransporter::send(void) {
         #endif
         
         
-        socket.println("POST /save_measures HTTP/1.0");
+        client.println("POST /save_measures HTTP/1.0");
         
-        // socket.println("Host: www.xxx.de");
-        socket.println("Content-Type: application/x-www-form-urlencoded");
-        socket.print("Content-Length: "); socket.println(pos, DEC);
-        socket.println();
+        // client.println("Host: www.xxx.de");
+        client.println("Content-Type: application/x-www-form-urlencoded");
+        client.print("Content-Length: "); client.println(pos, DEC);
+        client.println();
         
-        socket.print(buffer);
+        client.print(buffer);
         
         set_state(NET_STATE_RECEIVE);
+    } else {
+        #ifdef DEBUG
+        Serial.println("NetworkTransporter: connect failed");
+        Serial.print("  Connected: ");
+        Serial.println(client.connected() ? "YES" : "NO");
+        Serial.print("  Available: ");
+        Serial.println(client.available());
+        Serial.print("  Status: ");
+        Serial.println(client.status());
+        #endif
+        client.stop();
     }
 }
 
@@ -96,13 +108,13 @@ void NetworkTransporter::receive(void) {
     #ifdef DEBUG
     Serial.println("NetworkTransporter: receive");
     #endif
-    if (socket.connected()) {
-        while (socket.available()) {
-            char c = socket.read();
+    if (client.connected()) {
+        while (client.available()) {
+            char c = client.read();
         }
    
-        if (!socket.connected()) {
-            socket.stop();
+        if (!client.connected()) {
+            client.stop();
             set_state(NET_STATE_SEND, NET_WAIT_TIME);
         }
     }

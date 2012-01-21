@@ -9,7 +9,8 @@
 #define NET_STATE_CLOSE 2
 
 // send measure every 15 minutes = 900 seconds
-#define NET_WAIT_TIME 900000
+// #define NET_WAIT_TIME 900000
+#define NET_WAIT_TIME 60000
 
 class NetworkTransporter: public TimedState {
 public:
